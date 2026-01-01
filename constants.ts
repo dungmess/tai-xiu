@@ -15,6 +15,9 @@ export const RODS = [
 export const TELCOS = ['VIETTEL', 'MOBIFONE', 'VINAPHONE', 'ZING', 'GATE'];
 export const CARD_AMOUNTS = [10000, 20000, 50000, 100000, 200000, 500000, 1000000];
 
+// 10,000 VND Card = 120,000 Gold (Withdrawal fee included)
+export const GOLD_TO_VND_RATE = 12; 
+
 export const MASTER_MESSAGES = {
   WIN: [
     "Khá lắm! Thần bài tái thế chăng?",

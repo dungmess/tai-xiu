@@ -1,5 +1,5 @@
 
-export type GameState = 'BETTING' | 'ROLLING' | 'RESULT' | 'WALKING' | 'FISHING' | 'CATCHING' | 'SHOP' | 'TOPUP';
+export type GameState = 'BETTING' | 'ROLLING' | 'RESULT' | 'WALKING' | 'FISHING' | 'CATCHING' | 'SHOP' | 'TOPUP' | 'WITHDRAW';
 
 export type BetChoice = 'TAI' | 'XIU';
 
@@ -44,5 +44,16 @@ export interface TopUpHistory {
   telco: string;
   amount: number;
   status: 'PENDING' | 'SUCCESS' | 'ERROR';
+  date: string;
+}
+
+export interface WithdrawHistory {
+  id: string;
+  telco: string;
+  amount: number;
+  goldDeducted: number;
+  status: 'PENDING' | 'COMPLETED' | 'REJECTED';
+  cardCode?: string;
+  cardSerial?: string;
   date: string;
 }

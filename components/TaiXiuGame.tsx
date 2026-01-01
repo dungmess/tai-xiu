@@ -4,6 +4,7 @@ import { GameState, UserStats, BetChoice, GameHistory, BetResult } from '../type
 import { BET_LEVELS, DICE_FACES, INITIAL_GOLD } from '../constants';
 import { generateBetCommentary } from '../services/geminiService';
 import TopUpPage from './TopUpPage';
+import WithdrawPage from './WithdrawPage';
 
 const TaiXiuGame: React.FC = () => {
   const [stats, setStats] = useState<UserStats>(() => {
@@ -112,10 +113,14 @@ const TaiXiuGame: React.FC = () => {
     setStats(prev => ({ ...prev, gold: prev.gold + goldBonus }));
   };
 
+  const handleWithdrawSuccess = (goldDeducted: number) => {
+    setStats(prev => ({ ...prev, gold: prev.gold - goldDeducted }));
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center p-4 md:p-8 font-sans">
       {/* Header */}
-      <div className="w-full max-w-4xl flex justify-between items-center mb-8">
+      <div className="w-full max-w-5xl flex flex-wrap justify-between items-center mb-8 gap-4">
         <div className="bg-slate-900 border border-slate-700 p-3 rounded-2xl flex items-center gap-4 shadow-xl">
           <div className="text-2xl animate-pulse">💰</div>
           <div>
@@ -124,16 +129,22 @@ const TaiXiuGame: React.FC = () => {
           </div>
         </div>
         
-        <h1 className="text-3xl font-game text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 to-yellow-600 hidden md:block drop-shadow-lg">
+        <h1 className="text-2xl md:text-3xl font-game text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 to-yellow-600 drop-shadow-lg text-center order-first md:order-none w-full md:w-auto">
           VƯƠNG QUỐC TÀI XỈU
         </h1>
 
         <div className="flex gap-2">
             <button 
                 onClick={() => setGameState('TOPUP')}
-                className="bg-green-600 hover:bg-green-500 text-white font-game px-4 py-3 rounded-xl shadow-lg transition-transform active:scale-95 border-b-4 border-green-800 flex items-center gap-2"
+                className="bg-green-600 hover:bg-green-500 text-white font-game px-4 py-3 rounded-xl shadow-lg transition-transform active:scale-95 border-b-4 border-green-800 flex items-center gap-2 text-xs md:text-sm"
             >
                 <span className="text-xl">+</span> NẠP TIỀN
+            </button>
+            <button 
+                onClick={() => setGameState('WITHDRAW')}
+                className="bg-red-600 hover:bg-red-500 text-white font-game px-4 py-3 rounded-xl shadow-lg transition-transform active:scale-95 border-b-4 border-red-800 flex items-center gap-2 text-xs md:text-sm"
+            >
+                📤 RÚT THẺ
             </button>
         </div>
       </div>
@@ -283,11 +294,18 @@ const TaiXiuGame: React.FC = () => {
         </div>
       </div>
 
-      {/* Trang Nạp Tiền Overlay */}
+      {/* Overlays */}
       {gameState === 'TOPUP' && (
         <TopUpPage 
           onClose={() => setGameState('BETTING')} 
           onSuccess={handleTopUpSuccess}
+        />
+      )}
+      {gameState === 'WITHDRAW' && (
+        <WithdrawPage 
+          currentGold={stats.gold}
+          onClose={() => setGameState('BETTING')} 
+          onWithdraw={handleWithdrawSuccess}
         />
       )}
     </div>
